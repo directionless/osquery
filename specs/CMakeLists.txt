@@ -53,6 +53,7 @@ function(generateNativeTables)
     system_info.table
     uptime.table
     users.table
+    usersnoi.table
     utility/file.table
     utility/osquery_events.table
     utility/osquery_extensions.table
