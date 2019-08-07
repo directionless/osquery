@@ -7,7 +7,7 @@
  */
 
 /*
-** This file is generated. Do not modify it manually!
+** This file is generated. Do not modify it manually! (forieign.cpp.in)
 */
 
 #include <osquery/events.h>

@@ -7,7 +7,7 @@
  */
 
 /*
-** This file is generated. Do not modify it manually!
+** This file is generated. Do not modify it manually! (default.cpp.in)
 */
 
 #include <osquery/events.h>
@@ -114,9 +114,15 @@ class {{table_name_cc}}TablePlugin : public TablePlugin {
   TableRows generate(QueryContext& context) override {
 {% if attributes.cacheable %}\
     if (isCached(kCacheStep, context)) {
+#if defined(DEBUG_TABLE_GEN)
+      VLOG(1) << "{{class_name}} cached\n";
+#endif
       return getCache();
     }
 {% endif %}\
+#if defined(DEBUG_TABLE_GEN)
+      VLOG(1) << "{{class_name}} calling {{function}}\n";
+#endif
 {% if attributes.strongly_typed_rows %}\
     TableRows results = tables::{{function}}(context);
 {% else %}\
