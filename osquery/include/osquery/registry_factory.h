@@ -255,6 +255,7 @@ struct RI {
 
 template <class P>
 struct PI {
+  // seph here
   PI(const char* registry_name,
      const char* plugin_name,
      bool is_optional = false) {
@@ -274,10 +275,12 @@ struct PI {
   const RI<class_name> k##class_name(registry_name, registry_name, true);      \
   }
 
+  // sepgh here
 #define REGISTER(class_name, registry_name, plugin_name)                       \
   namespace registries {                                                       \
   const PI<class_name> k##class_name(registry_name, plugin_name, false);       \
-  }
+}
+
 
 #define REGISTER_INTERNAL(class_name, registry_name, plugin_name)              \
   namespace registries {                                                       \
@@ -285,3 +288,10 @@ struct PI {
   }
 
 } // namespace osquery
+
+
+/*
+  namespace registries {                                                       \
+      const PI<FilesystemConfigPlugin> kFilesystemConfigPlugin(config, filesystem, false);   \
+    }
+*/

@@ -32,7 +32,12 @@ FLAG(bool,
      extensions_default_index,
      true,
      "Enable INDEX on all extension table columns (default true)");
-
+  /*
+FLAG(bool
+     disable_native_tables,
+     false,
+     "Disable native tables. May break functionality");
+  */
 SHELL_FLAG(bool, planner, false, "Enable osquery runtime planner output");
 
 DECLARE_bool(disable_events);
@@ -1008,6 +1013,8 @@ static int xFilter(sqlite3_vtab_cursor* pVtabCursor,
 
 struct sqlite3_module* getVirtualTableModule(const std::string& table_name,
                                              bool extension) {
+  //if(FLAGS_disable_native_tables) {
+  //}
   UpgradeLock lock(sqlite_module_map_mutex);
 
   if (sqlite_module_map.find(table_name) != sqlite_module_map.end()) {
@@ -1047,6 +1054,7 @@ Status attachTableInternal(const std::string& name,
                            const std::string& statement,
                            const SQLiteDBInstanceRef& instance,
                            bool is_extension) {
+  // seph here
   if (SQLiteDBManager::isDisabled(name)) {
     VLOG(1) << "Table " << name << " is disabled, not attaching";
     return Status(0, getStringForSQLiteReturnCode(0));

@@ -5,13 +5,20 @@
  *  This source code is licensed in accordance with the terms specified in
  *  the LICENSE file found in the root directory of this source tree.
  */
+#include <iostream>
+
 
 #include <osquery/extensions.h>
+#include <osquery/logger.h>
+#include <osquery/sql/sqlite_util.h>
 #include <osquery/registry_factory.h>
 #include <osquery/registry_interface.h>
 #include <osquery/utils/conversions/split.h>
 
 namespace osquery {
+
+FLAG(bool, disable_native_tables, false, "Disable tables");
+
 void RegistryInterface::removeUnsafe(const std::string& item_name) {
   if (items_.count(item_name) > 0) {
     items_[item_name]->tearDown();
@@ -374,6 +381,32 @@ void AutoRegisterInterface::autoloadRegistry(
 
 void AutoRegisterInterface::autoloadPlugin(
     std::unique_ptr<AutoRegisterInterface> ar_) {
+  // seph here
+  //
+  // Note, this happens _before_ disable_tables is parsed, so we can't
+  // just use `SQLiteDBManager::isDisabled(ar_->name_.c_str())` That
+  // may be something to change.
+  //
+  // flags don;t work either? Is this running before the flag parsing?
+  if (
+      strncmp(ar_->type_.c_str(), "table", 5) == 0
+      //&& SQLiteDBManager::isDisabled(ar_->name_.c_str())
+      && FLAGS_disable_native_tables
+      //&& !ar_->optional_ // why does this need a !
+      ) {
+        std::cout << "seph skipping a plugin for "
+	    << ar_->type_.c_str()
+	    << " " << ar_->name_.c_str()
+	    << "\n";
+
+    return;
+    }
+
+    std::cout << "seph loading a plugin for "
+	    << ar_->type_.c_str()
+	    << " " << ar_->name_.c_str()
+	    << "\n";
+  //if !(osquery::SQLiteDBManager::isDisabled(plugin_name)) {
   plugins().push_back(std::move(ar_));
 }
 

@@ -24,6 +24,7 @@ function(generateOsqueryRegistry)
     osquery_headers
     osquery_core
     osquery_process
+    osquery_sql
     osquery_utils_conversions
     osquery_utils_system_env
     thirdparty_boost

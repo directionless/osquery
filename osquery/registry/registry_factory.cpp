@@ -22,6 +22,7 @@
 namespace osquery {
 
 HIDDEN_FLAG(bool, registry_exceptions, false, "Allow plugin exceptions");
+  //FLAG(bool, disable_native_tables, false, "Disable tables");
 
 RegistryFactory& RegistryFactory::get() {
   static RegistryFactory instance;
@@ -81,6 +82,7 @@ Status RegistryFactory::addBroadcast(const RouteUUID& uuid,
           VLOG(1) << "Extension " << uuid
                   << " has duplicate plugin name: " << item.first
                   << " in registry: " << registry.first;
+	  // seph here
           return Status(1, "Duplicate registry item: " + item.first);
         }
       }
