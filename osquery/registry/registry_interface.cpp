@@ -14,10 +14,12 @@
 #include <osquery/registry_factory.h>
 #include <osquery/registry_interface.h>
 #include <osquery/utils/conversions/split.h>
+#include <osquery/flags.h>
+
 
 namespace osquery {
 
-FLAG(bool, disable_native_tables, false, "Disable tables");
+FLAG(bool, disable_native_tables, false, " tables");
 
 void RegistryInterface::removeUnsafe(const std::string& item_name) {
   if (items_.count(item_name) > 0) {
@@ -361,7 +363,7 @@ bool RegistryInterface::exists_(const std::string& item_name,
 
 AutoRegisterInterface::AutoRegisterInterface(const char* _type,
                                              const char* _name,
-                                             bool optional)
+                                             bool optional) // Is optional misnamed? 
     : type_(_type), name_(_name), optional_(optional) {}
 
 AutoRegisterSet& AutoRegisterInterface::registries() {
@@ -388,11 +390,13 @@ void AutoRegisterInterface::autoloadPlugin(
   // may be something to change.
   //
   // flags don;t work either? Is this running before the flag parsing?
-  if (
-      strncmp(ar_->type_.c_str(), "table", 5) == 0
+  //
+  // Update -- this is supper weird. Flags should be in by now. But
+  // let's do this in codegen?
+  if (strncmp(ar_->type_.c_str(), "table", 5) == 0
+      && ! ar_->optional_ // This var seems to be inverted
       //&& SQLiteDBManager::isDisabled(ar_->name_.c_str())
-      && FLAGS_disable_native_tables
-      //&& !ar_->optional_ // why does this need a !
+      //&& FLAGS_disable_native_tables
       ) {
         std::cout << "seph skipping a plugin for "
 	    << ar_->type_.c_str()
@@ -400,12 +404,13 @@ void AutoRegisterInterface::autoloadPlugin(
 	    << "\n";
 
     return;
-    }
+    
+  }
 
-    std::cout << "seph loading a plugin for "
-	    << ar_->type_.c_str()
-	    << " " << ar_->name_.c_str()
-	    << "\n";
+  //    std::cout << "seph loading a plugin for "
+  //	    << ar_->type_.c_str()
+  //	    << " " << ar_->name_.c_str()
+  //	    << "\n";
   //if !(osquery::SQLiteDBManager::isDisabled(plugin_name)) {
   plugins().push_back(std::move(ar_));
 }

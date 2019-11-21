@@ -134,12 +134,8 @@ class {{table_name_cc}}TablePlugin : public TablePlugin {
 {% if attributes.utility %}
 REGISTER_INTERNAL({{table_name_cc}}TablePlugin, "table", "{{table_name}}");
 {% else %}
-// seph here
-//  if (SQLiteDBManager::isDisabled(name)) {
-//    VLOG(1) << "Table " << name << " is disabled, not attaching";
-//  } else {
+// seph here -- this is at the top level. Can't put if outside a function
 REGISTER({{table_name_cc}}TablePlugin, "table", "{{table_name}}");
-  //  }
 {% endif %}
 /// END[GENTABLE]
 
