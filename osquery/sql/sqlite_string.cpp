@@ -7,6 +7,7 @@
  */
 
 #include <assert.h>
+#include <cstdlib>
 
 #ifdef WIN32
 #include <ws2tcpip.h>
@@ -22,6 +23,8 @@
 #include <osquery/flags.h>
 #include <osquery/logger.h>
 #include <osquery/utils/conversions/split.h>
+#include <osquery/utils/conversions/tryto.h>
+
 
 #include <sqlite3.h>
 
@@ -237,6 +240,64 @@ static void ip4StringToDecimalFunc(sqlite3_context* context,
   }
 }
 
+  /**
+ * @brief Convert string of arbitrary base to long
+ */
+static void stringToLongFunc(sqlite3_context* context,
+				int argc,
+				sqlite3_value** argv) {
+  assert(argc == 1 || argc == 2);
+
+  // require a string to convert
+  if (SQLITE_NULL == sqlite3_value_type(argv[0])) {
+    sqlite3_result_null(context);
+    return;
+  }
+
+  // If the base is unspecified, assume decimal
+  int base = 10;
+  if (argc > 1 && SQLITE_NULL != sqlite3_value_type(argv[1])) {
+    base = sqlite3_value_int(argv[1]);
+  }
+
+
+  long value = tryTo<long>(std::string((char*)sqlite3_value_text(argv[0])), base).takeOr(0l);
+  sqlite3_result_int64(context, value);
+}
+
+  /**
+   * @brief convert long to string using arbitrary base
+   */
+  static void longToStringFunc(sqlite3_context* context,
+			       int argc,
+			       sqlite3_value** argv) {
+    assert(argc == 1 || argc == 2);
+
+  // require an int to convert
+    if (SQLITE_NULL == sqlite3_value_type(argv[0])) {
+      sqlite3_result_null(context);
+      return;
+    }
+
+  // If the base is unspecified, assume decimal
+  int base = 10;
+  if (argc > 1 && SQLITE_NULL != sqlite3_value_type(argv[1])) {
+    base = sqlite3_value_int(argv[1]);
+  }
+
+  // FIXME: handle negatives? Fix typing in general
+
+  char buffer [64];
+  itoa (sqlite3_value_int64(argv[0]),buffer,base);
+
+  sqlite3_result_text(context, buffer);
+}
+
+  /**
+   * @brief convert long to string using arbitrary base
+   * /
+
+
 void registerStringExtensions(sqlite3* db) {
   sqlite3_create_function(db,
                           "split",
@@ -270,5 +331,23 @@ void registerStringExtensions(sqlite3* db) {
                           regexStringMatchFunc,
                           nullptr,
                           nullptr);
+  sqlite3_create_function(db,
+                          "stoi",
+                          2,
+                          SQLITE_UTF8 | SQLITE_DETERMINISTIC,
+                          nullptr,
+                          stringToLongFunc,
+                          nullptr,
+                          nullptr);
+    sqlite3_create_function(db,
+                          "stoi",
+                          1,
+                          SQLITE_UTF8 | SQLITE_DETERMINISTIC,
+                          nullptr,
+                          stringToLongFunc,
+                          nullptr,
+                          nullptr);
+
+  
 }
 } // namespace osquery
