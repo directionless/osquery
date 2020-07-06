@@ -66,9 +66,9 @@ jobs:
             ccache-${{ runner.os }}-
             ccache-
 
-#      - name: "Run tests"
-#        run: ctest --build-nocmake -V
-#        working-directory: ${{ github.workspace }}/build
+      - name: "Run tests"
+        run: ctest --build-nocmake -V
+        working-directory: ${{ github.workspace }}/build
 
       - name: Run productbuild packaging
         run: cmake --build . --target package -j 3
