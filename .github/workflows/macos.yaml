@@ -71,7 +71,7 @@ jobs:
 #        working-directory: ${{ github.workspace }}/build
 
       - name: Run productbuild packaging
-        run: --build . --target package -j 3
+        run: cmake --build . --target package -j 3
         working-directory: ${{ github.workspace }}/build
 
       - name: "Run TGZ packaging"
