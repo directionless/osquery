@@ -34,39 +34,21 @@ jobs:
       - name:  "Create build folder"
         run: mkdir ${{ github.workspace }}/build
 
+      - name: Configure osquery
+        run: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 -DCMAKE_BUILD_TYPE=${{ matrix.build.type }} -DOSQUERY_BUILD_TESTS=ON ${{ matrix.build.extra_cmake_args }} ..
+        workingDirectory: ${{ github.workspace }}/build
+      - name: Build osquery
+        run: cmake --build . -j 3
+        workingDirectory: ${{ github.workspace }}/build
 
-#    - task: CacheBeta@2
-#      inputs:
-#        key: submodules | macOS | $(SubmoduleCacheVersion) | $(Build.SourceVersion)
-#        restoreKeys: submodules | macOS | $(SubmoduleCacheVersion)
-#        path: $(Build.SourcesDirectory)/.git/modules
-#      displayName: Submodule cache
+      - name: "Run tests"
+        run: ctest --build-nocmake -V
+        workingDirectory: ${{ github.workspace }}/build
 
+      - name: Run productbuild packaging
+        run: --build . --target package -j 3
+        workingDirectory: ${{ github.workspace }}/build
 
-     - name: Configure osquery
-       run: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 -DCMAKE_BUILD_TYPE=${{ matrix.build.type }} -DOSQUERY_BUILD_TESTS=ON ${{ matrix.build.extra_cmake_args }} ..
-       workingDirectory: ${{ github.workspace }}/build
-
-
-#    - task: CacheBeta@2
-#      inputs:
-#        key: ccache | macOS$(BUILD_TYPE)CMake | $(CacheVersion) | $(Build.SourceVersion)
-#        restoreKeys: ccache | macOS$(BUILD_TYPE)CMake | $(CacheVersion)
-#        path: $(CCACHE_DIR)
-#      displayName: ccache
-
-     - name: Build osquery
-       run: cmake --build . -j 3
-       workingDirectory: ${{ github.workspace }}/build
-
-     - name: "Run tests"
-       run: ctest --build-nocmake -V
-       workingDirectory: ${{ github.workspace }}/build
-
-     - name: Run productbuild packaging
-       run: --build . --target package -j 3
-       workingDirectory: ${{ github.workspace }}/build
-
-     - name: "Run TGZ packaging"
-       run: cmake -DPACKAGING_SYSTEM=TGZ ../ && cmake --build . --target package -j 3
-       workingDirectory: ${{ github.workspace }}/build
+      - name: "Run TGZ packaging"
+        run: cmake -DPACKAGING_SYSTEM=TGZ ../ && cmake --build . --target package -j 3
+        workingDirectory: ${{ github.workspace }}/build
