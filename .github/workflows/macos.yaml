@@ -1,0 +1,72 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_macOS:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # Consider changing this sometime
+      matrix:
+        build:
+          - type: Release
+            extra_cmake_args:
+          - type: Debug
+            extra_cmake_args: "-DOSQUERY_NO_DEBUG_SYMBOLS=ON"
+        os:
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # need a full checkout for `git describe`
+
+
+      - name: Install Homebrew and prerequisites
+        run: |
+          cmake --version
+          brew upgrade
+          brew install ccache flex bison
+          pip3 install setuptools pexpect==3.3 psutil timeout_decorator six thrift==0.11.0 osquery
+          sudo xcode-select -s /Applications/Xcode_10.3.app/Contents/Developer
+
+      - name:  "Create build folder"
+        run: mkdir ${{ github.workspace }}/build
+
+
+#    - task: CacheBeta@2
+#      inputs:
+#        key: submodules | macOS | $(SubmoduleCacheVersion) | $(Build.SourceVersion)
+#        restoreKeys: submodules | macOS | $(SubmoduleCacheVersion)
+#        path: $(Build.SourcesDirectory)/.git/modules
+#      displayName: Submodule cache
+
+
+    - name: Configure osquery
+      run: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 -DCMAKE_BUILD_TYPE=${{ matrix.build.type }} -DOSQUERY_BUILD_TESTS=ON ${{ matrix.build.extra_cmake_args }} ..
+      workingDirectory: ${{ github.workspace }}/build
+
+
+#    - task: CacheBeta@2
+#      inputs:
+#        key: ccache | macOS$(BUILD_TYPE)CMake | $(CacheVersion) | $(Build.SourceVersion)
+#        restoreKeys: ccache | macOS$(BUILD_TYPE)CMake | $(CacheVersion)
+#        path: $(CCACHE_DIR)
+#      displayName: ccache
+
+    - name: Build osquery
+      run: cmake --build . -j 3
+      workingDirectory: ${{ github.workspace }}/build
+
+    - name: "Run tests"
+      run: ctest --build-nocmake -V
+      workingDirectory: ${{ github.workspace }}/build
+
+    - name: Run productbuild packaging
+      run: --build . --target package -j 3
+      workingDirectory: ${{ github.workspace }}/build
+
+    - name: "Run TGZ packaging"
+      run: cmake -DPACKAGING_SYSTEM=TGZ ../ && cmake --build . --target package -j 3
+      workingDirectory: ${{ github.workspace }}/build
