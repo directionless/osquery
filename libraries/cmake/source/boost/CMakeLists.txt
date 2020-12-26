@@ -746,7 +746,7 @@ function(generateBoostContext)
   set(library_root "${BOOST_ROOT}/libs/context")
 
   set(source_files
-    "${library_root}/src/execution_context.cpp"
+    #"${library_root}/src/execution_context.cpp"
   )
 
   if(DEFINED PLATFORM_LINUX AND TARGET_PROCESSOR STREQUAL "x86_64")
@@ -761,11 +761,17 @@ function(generateBoostContext)
       "${library_root}/src/asm/make_arm64_aapcs_elf_gas.S"
       "${library_root}/src/asm/ontop_arm64_aapcs_elf_gas.S"
     )
-  elseif(DEFINED PLATFORM_MACOS)
+  elseif(DEFINED PLATFORM_MACOS AND TARGET_PROCESSOR STREQUAL "x86_64")
     set(asm_source_file_list
       "${library_root}/src/asm/jump_x86_64_sysv_macho_gas.S"
       "${library_root}/src/asm/make_x86_64_sysv_macho_gas.S"
       "${library_root}/src/asm/ontop_x86_64_sysv_macho_gas.S"
+    )
+elseif(DEFINED PLATFORM_MACOS AND TARGET_PROCESSOR STREQUAL "arm64")
+    set(asm_source_file_list
+      "${library_root}/src/asm/jump_arm64_aapcs_macho_gas.S"
+      "${library_root}/src/asm/make_arm64_aapcs_macho_gas.S"
+      "${library_root}/src/asm/ontop_arm64_aapcs_macho_gas.S"
     )
   elseif(DEFINED PLATFORM_WINDOWS)
     if(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -963,7 +969,7 @@ function(generateBoostAtomic)
   set(library_root "${BOOST_ROOT}/libs/atomic")
 
   add_library(thirdparty_boost_atomic STATIC
-    "${library_root}/src/lockpool.cpp"
+    "${library_root}/src/lock_pool.cpp"
   )
 
   target_include_directories(thirdparty_boost_atomic SYSTEM PUBLIC
