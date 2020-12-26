@@ -37,24 +37,24 @@ function(augeasMain)
   if(DEFINED PLATFORM_MACOS)
     # We need to use Bison and Flex from homebrew because the ones provided by
     # Xcode are not compatible
-    set(bison_executable_path "/usr/local/opt/bison/bin/bison")
-    set(flex_executable_path "/usr/local/opt/flex/bin/flex")
+    ###set(bison_executable_path "/usr/local/opt/bison/bin/bison")
+    ###set(flex_executable_path "/usr/local/opt/flex/bin/flex")
 
-    if(EXISTS "${bison_executable_path}")
-      set(BISON_EXECUTABLE "${bison_executable_path}")
-    endif()
+    ###if(EXISTS "${bison_executable_path}")
+    ###  set(BISON_EXECUTABLE "${bison_executable_path}")
+    ###endif()
 
-    if(EXISTS "${flex_executable_path}")
-      set(FLEX_EXECUTABLE "${flex_executable_path}")
-    endif()
+    ###if(EXISTS "${flex_executable_path}")
+    ###  set(FLEX_EXECUTABLE "${flex_executable_path}")
+    ###endif()
 
-    if(NOT DEFINED BISON_EXECUTABLE OR NOT DEFINED FLEX_EXECUTABLE)
-      message(FATAL_ERROR "Both bison and flex are required from homebrew; you can install them with `brew install flex bison`")
-    endif()
+    ###if(NOT DEFINED BISON_EXECUTABLE OR NOT DEFINED FLEX_EXECUTABLE)
+    ###  message(FATAL_ERROR "Both bison and flex are required from homebrew; you can install them with `brew install flex bison`")
+    ###endif()
 
-    set(environment_modifier
-      "/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$ENV{PATH}"
-    )
+    ###set(environment_modifier
+    ###  "/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$ENV{PATH}"
+    ###)
 
   else()
     foreach(dependency FLEX BISON)
