@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     container:
-      image: trailofbits/osquery:ubuntu-18.04-toolchain-v9
+      image: directionless/osqbuildbeta
       options: --privileged --init -v /var/run/docker.sock:/var/run/docker.sock
 
     steps:
