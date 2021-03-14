@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     container:
-      image: directionless/osqbuildbeta
+      image: trailofbits/osquery:ubuntu-18.04-toolchain-v9
       options: --privileged --init -v /var/run/docker.sock:/var/run/docker.sock
 
     steps:
@@ -211,13 +211,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     container:
-      image: trailofbits/osquery:ubuntu-18.04-toolchain-v9
+      image: directionless/osqbuildbeta
       options: --privileged --init -v /var/run/docker.sock:/var/run/docker.sock
 
     strategy:
       matrix:
         build_type: [Release, RelWithDebInfo, Debug]
-        os: [ubuntu-18.04]
+        os: [ubuntu-18.04, self-hosted]
 
     steps:
     - name: Clone the osquery repository
