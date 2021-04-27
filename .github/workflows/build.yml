@@ -15,19 +15,11 @@
 name: build
 
 on:
-  # Run this workflow once every 6 hours against the master branch
-  schedule:
-   - cron: "0 */6 * * *"
-
   push:
     branches:
-      - 'master'
+      - '**'
 
     tags:
-      - '*'
-
-  pull_request:
-    branches:
       - '*'
 
 # If the initial code sanity checks are passing, then one job
