@@ -120,7 +120,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
   // of boot labels, each 2 bytes wide
   std::string efiData;
 
-  if (!readEfiVar(kEFIBootGUID, "BootOrder", efiData).ok()) {
+  if (!readEfiVar(kEFIBootGUID, "BootOrder", efiData, 0).ok()) {
     TLOG << "efivar BootOrder failed to read";
     return results;
   }
