@@ -1,7 +1,7 @@
 table_name("uefi_boot_order")
 description("UEFI Boot Order.")
 schema([
-    Column("label", STRING),
+    Column("label", TEXT, "Boot device label"),
 ])
 
 implementation("uefi_boot_order@genUefiBootOrder")
