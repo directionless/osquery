@@ -13,7 +13,8 @@
 #include <osquery/logger/logger.h>
 #include <osquery/tables/system/secureboot.hpp>
 
-#include <boost/format.hpp>
+#include <boost/algorithm/hex.hpp>
+
 
 namespace osquery {
 namespace tables {
@@ -141,8 +142,10 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
-    auto bootLabel = boost::format("%04X", efiData[i] + efiData[i+1]).str();
-    
+    // need bytes to hex
+    // https://github.com/rhboot/efibootmgr/blob/103aa22ece98f09fe3ea2a0c83988f0ee2d0e5a8/src/efibootmgr.c#L702
+    auto bootLabel = boost::algorithm::unhex(std::string(efiData[i] + efiData[i+1]));
+
     TLOG << "Got Label: " << bootLabel << "\n";
   }
 
