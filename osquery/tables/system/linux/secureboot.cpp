@@ -27,7 +27,7 @@ namespace tables {
 // outweighs that.
 const std::string efivarsDir = "/sys/firmware/efi/efivars/";
 
-  void readEfiVar(                    std::string guid,
+  Status readEfiVar(                    std::string guid,
 				      std::string name,
 				      std::string& efiData,
 				      size_t size
