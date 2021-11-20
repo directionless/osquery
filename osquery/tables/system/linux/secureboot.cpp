@@ -148,6 +148,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
     char bootLabel [4];
     sprintf(&bootLabel[0], "%02X%02X", efiData[i+1], efiData[i]);
 
+    r["position"] = i/2;
     r["label"] = TEXT(bootLabel);
 
     
