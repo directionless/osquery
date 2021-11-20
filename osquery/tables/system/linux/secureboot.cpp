@@ -151,7 +151,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
     //auto unpadded = efiData[i] + efiData[i+1];
     //auto bootLabel = std::string(n_zero - std::min(4, unpadded.length()), '0') + unpadded;
 
-    TLOG << "Got Label: i:" << efiData[i] << << " i+1: " efiData[i+1]<< "\n";
+    TLOG << "Got Label: i:" << efiData[i] << " i+1: " efiData[i+1] << "\n";
   }
 
   return results;
