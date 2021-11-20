@@ -158,8 +158,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
     //auto unpadded = efiData[i] + efiData[i+1];
     //auto bootLabel = std::string(n_zero - std::min(4, unpadded.length()), '0') + unpadded;
 
-    TLOG << "Got Label bige " << bootLabelB << "\n";
-    TLOG << "Got Label lite " << bootLabelL << "\n";
+    TLOG << "Got Label bige " << bootLabel << "\n";
 
     results.push_back(r);
   }
