@@ -90,7 +90,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
   // that data here, so we can just ignore it. The remainder is a list
   // of boot labels, each 2 bytes wide
   std::string efiData;
-  if (!readFile(efivarPath, efiData).ok()) {
+  if (!readFile(efiBootOrderPath, efiData).ok()) {
     // failure to read _probably_ means the kernel doesn't support EFI
     // vars. This is not uncommon.
     return results;
