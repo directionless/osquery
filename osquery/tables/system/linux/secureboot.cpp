@@ -30,7 +30,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
   void readEfiVar(                    std::string guid,
 				      std::string name,
 				      std::string& data,
-				      size_t size,
+				      size_t size
 				      ) {
     const std::string efivarPath = efivarsDir + name + '-' + guid;
 
