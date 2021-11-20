@@ -101,7 +101,13 @@ QueryData genUefiBootOrder(QueryContext& context) {
     return results;
   }
 
-  for (auto i = 0; i < efiData.length();  i+=2) {
+  if(efiData.length() < 6 ) {
+    TLOG << "efivar BootOrder is too small";
+    return results;
+  }
+
+  // First 4 bytes are attributes, so we start reading at 4
+  for (auto i = 4; i < efiData.length();  i+=2) {
     if (i > efiData.length()) {
       TLOG << "efivar BootOrder is not a multiple of 2 bytes";
       return results;
