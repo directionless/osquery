@@ -140,11 +140,18 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
-    // Convert these to their 4 digit numbers. It's not clear if this needs some hex or unhex conversions
-    auto unpadded = efiData[i] + efiData[i+1];
-    auto bootLabel = std::string(n_zero - std::min(4, unpadded.length()), '0') + unpadded;
+    // The boot label is, I believe, stored as hex. As we're just
+    // printing it to osquery we can leave it in the std::string, and
+    // skip converting it to an int. We do still want to pad it.
 
-    TLOG << "Got Label: " << bootLabel << "\n";
+    // Also, endian? WTF
+
+    
+    // Convert these to their 4 digit numbers. It's not clear if this needs some hex or unhex conversions
+    //auto unpadded = efiData[i] + efiData[i+1];
+    //auto bootLabel = std::string(n_zero - std::min(4, unpadded.length()), '0') + unpadded;
+
+    TLOG << "Got Label: i:" << efiData[i] << << " i+1: " efiData[i+1]<< "\n";
   }
 
   return results;
