@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: (Apache-2.0 OR GPL-2.0-only)
  */
 
+#include <format>
+
 #include <osquery/core/core.h>
 #include <osquery/core/tables.h>
 #include <osquery/filesystem/filesystem.h>
@@ -116,9 +118,9 @@ QueryData genUefiBootOrder(QueryContext& context) {
   // that data here, so we can just ignore it. The remainder is a list
   // of boot labels, each 2 bytes wide
   std::string efiData;
-  if (!readFile(efiBootOrderPath, efiData).ok()) {
-    // failure to read _probably_ means the kernel doesn't support EFI
-    // vars. This is not uncommon.
+
+  if (!readEfiVar(kEFIBootGUID, "BootOrder", efiData).ok()) {
+    TLOG << "efivar BootOrder failed to read";
     return results;
   }
 
@@ -139,8 +141,8 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
-    auto bootLabel = efiData[i] + efiData[i+1];
-
+    auto bootLabel = std::format("%04X", efiData[i] + efiData[i+1]);
+    
     TLOG << "Got Label: " << bootLabel << "\n";
   }
 
