@@ -83,7 +83,8 @@ QueryData genSecureBoot(QueryContext& context) {
 }
 
 QueryData genUefiBootOrder(QueryContext& context) {
-  const std::string efiBootOrderPath = efivarsDir + "BootOrder-" + guid;
+  const std::string efiBootOrderPath = efivarsDir + "BootOrder-" + kEFIBootGUID;
+  QueryData results;
 
   // The first 4 bytes of efivars are attribute data, we don't need
   // that data here, so we can just ignore it. The remainder is a list
@@ -92,20 +93,18 @@ QueryData genUefiBootOrder(QueryContext& context) {
   if (!readFile(efivarPath, efiData).ok()) {
     // failure to read _probably_ means the kernel doesn't support EFI
     // vars. This is not uncommon.
-    return;
+    return results;
   }
 
   if(efiData.length() % 2 != 0) {
     TLOG << "efivar BootOrder is not a multiple of 2 bytes";
-    return;
+    return results;
   }
-
-  QueryData results;
 
   for (int i = 0; i < efiData.length();  i+=2) {
     if (i > efiData.length()) {
       TLOG << "efivar BootOrder is not a multiple of 2 bytes";
-      return;
+      return results;
     }
 
     auto bootLabel = efiData[i] + efiData[i+1];
