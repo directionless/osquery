@@ -181,6 +181,7 @@ function(generateNativeTables)
     "linux/systemd_units.table:linux"
     "linwin/intel_me_info.table:linux,windows"
     "linwin/secureboot.table:linux,windows"
+    "linwin/uefi_boot_order.table:linux,windows"
     "lldpd/lldp_neighbors.table:linux,macos,freebsd"
     "kernel_info.table:linux,macos,windows"
     "macwin/certificates.table:macos,windows"

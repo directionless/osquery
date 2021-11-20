@@ -101,7 +101,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
     return results;
   }
 
-  for (int i = 0; i < efiData.length();  i+=2) {
+  for (auto i = 0; i < efiData.length();  i+=2) {
     if (i > efiData.length()) {
       TLOG << "efivar BootOrder is not a multiple of 2 bytes";
       return results;
