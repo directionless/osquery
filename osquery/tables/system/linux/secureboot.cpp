@@ -29,7 +29,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
 
   void readEfiVar(                    std::string guid,
 				      std::string name,
-				      std::string& data,
+				      std::string& efiData,
 				      size_t size
 				      ) {
     const std::string efivarPath = efivarsDir + name + '-' + guid;
@@ -42,7 +42,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
 
 
     // First 4 bytes are attributes, so the length should be _at least_ that
-    if (data.length() < 4) {
+    if (efiData.length() < 4) {
       TLOG << "Under read on efivar file : " << efivarPath;
       return Status(1);
     }
