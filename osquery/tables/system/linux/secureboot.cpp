@@ -141,15 +141,22 @@ QueryData genUefiBootOrder(QueryContext& context) {
     }
 
     Row r;
+    r["position"] = INTEGER(i/2 - 4);
 
     // The boot label is, I believe, stored as little-endian hex. We
     // read this as a std::string. As our subsequent uses are still
     // simple strings, we can mostly leave it as is, just pad it, 
     char bootLabel [4];
     sprintf(&bootLabel[0], "%02X%02X", efiData[i+1], efiData[i]);
-
-    r["position"] = INTEGER(i/2);
     r["label"] = TEXT(bootLabel);
+
+    std::string bootName;
+    std::string labelAsStr = {bootLabel};
+    if (!readEfiVar(kEFIBootGUID, "Boot" + labelAsStr, bootName, 0).ok()) {
+      TLOG << "efivar boot name failed to read label" << bootLabel;
+      continue;
+    }
+    r["name"] = TEXT(bootName);
 
     
     // Also, endian? WTF
