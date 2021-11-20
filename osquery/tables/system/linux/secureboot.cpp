@@ -144,7 +144,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
 
     // need bytes to hex
     // https://github.com/rhboot/efibootmgr/blob/103aa22ece98f09fe3ea2a0c83988f0ee2d0e5a8/src/efibootmgr.c#L702
-    auto bootLabel = boost::algorithm::unhex(std::string(efiData[i] + efiData[i+1]));
+    auto bootLabel = boost::algorithm::unhex(efiData[i] + efiData[i+1]);
 
     TLOG << "Got Label: " << bootLabel << "\n";
   }
