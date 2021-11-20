@@ -140,15 +140,15 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
+    Row r;
+
     // The boot label is, I believe, stored as little-endian hex. We
     // read this as a std::string. As our subsequent uses are still
-    // simple strings, we can mostly leave it as is.
-    char bootLabelL [4];
-    char bootLabelB [4];
+    // simple strings, we can mostly leave it as is, just pad it, 
+    char bootLabel [4];
+    sprintf(&bootLabel[0], "%02X%02X", efiData[i+1], efiData[i]);
 
-    sprintf(&bootLabelL[0], "%02X%02X", efiData[i], efiData[i+1]);
-    sprintf(&bootLabelB[0], "%02X%02X", efiData[i+1], efiData[i]);
-
+    r["label"] = TEXT(bootLabel);
 
     
     // Also, endian? WTF
@@ -160,6 +160,8 @@ QueryData genUefiBootOrder(QueryContext& context) {
 
     TLOG << "Got Label bige " << bootLabelB << "\n";
     TLOG << "Got Label lite " << bootLabelL << "\n";
+
+    results.push_back(r);
   }
 
   return results;
