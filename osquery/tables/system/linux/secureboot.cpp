@@ -27,6 +27,32 @@ namespace tables {
 // outweighs that.
 const std::string efivarsDir = "/sys/firmware/efi/efivars/";
 
+  void readEfiVar(                    std::string guid,
+				      std::string name,
+				      std::string& data,
+				      size_t size,
+				      ) {
+    const std::string efivarPath = efivarsDir + name + '-' + guid;
+
+    // failure to read _probably_ means the kernel doesn't support EFI
+    // vars. This is not uncommon.
+    if (!readFile(efivarPath, efiData, size).ok()) {
+      return Status::success();
+    }
+
+
+    // First 4 bytes are attributes, so the length should be _at least_ that
+    if (data.length() < 4) {
+      TLOG << "Under read on efivar file : " << efivarPath;
+      return Status(1);
+    }
+
+    return Status::success();
+  }
+
+
+
+  
 void readBoolEfiVar(Row& row,
                     std::string column_name,
                     std::string guid,
