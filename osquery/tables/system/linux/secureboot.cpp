@@ -7,13 +7,13 @@
  * SPDX-License-Identifier: (Apache-2.0 OR GPL-2.0-only)
  */
 
-#include <format>
-
 #include <osquery/core/core.h>
 #include <osquery/core/tables.h>
 #include <osquery/filesystem/filesystem.h>
 #include <osquery/logger/logger.h>
 #include <osquery/tables/system/secureboot.hpp>
+
+#include <boost/format.hpp>
 
 namespace osquery {
 namespace tables {
@@ -141,7 +141,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
-    auto bootLabel = std::format("%04X", efiData[i] + efiData[i+1]);
+    auto bootLabel = boost::format("%04X", efiData[i] + efiData[i+1]).str();
     
     TLOG << "Got Label: " << bootLabel << "\n";
   }
