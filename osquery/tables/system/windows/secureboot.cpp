@@ -79,5 +79,11 @@ QueryData genSecureBoot(QueryContext& context) {
   results.push_back(r);
   return results;
 }
+
+QueryData genUefiBootOrder(QueryContext& context) {
+  QueryData results;
+  return results;
+}
+
 } // namespace tables
 } // namespace osquery

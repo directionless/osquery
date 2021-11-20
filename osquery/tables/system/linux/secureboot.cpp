@@ -81,5 +81,39 @@ QueryData genSecureBoot(QueryContext& context) {
   results.push_back(r);
   return results;
 }
+
+QueryData genUefiBootOrder(QueryContext& context) {
+  const std::string efiBootOrderPath = efivarsDir + "BootOrder-" + guid;
+
+  // The first 4 bytes of efivars are attribute data, we don't need
+  // that data here, so we can just ignore it. The remainder is a list
+  // of boot labels, each 2 bytes wide
+  std::string efiData;
+  if (!readFile(efivarPath, efiData).ok()) {
+    // failure to read _probably_ means the kernel doesn't support EFI
+    // vars. This is not uncommon.
+    return;
+  }
+
+  if(efiData.length() % 2 != 0) {
+    TLOG << "efivar BootOrder is not a multiple of 2 bytes";
+    return;
+  }
+
+  QueryData results;
+
+  for (int i = 0; i < efiData.length();  i+=2) {
+    if (i > efiData.length()) {
+      TLOG << "efivar BootOrder is not a multiple of 2 bytes";
+      return;
+    }
+
+    auto bootLabel = efiData[i] + efiData[i+1];
+
+    TLOG << "Got Label: " << bootLabel << "\n";
+  }
+
+  return results;
+}
 } // namespace tables
 } // namespace osquery

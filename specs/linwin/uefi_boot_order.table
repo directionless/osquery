@@ -1,0 +1,10 @@
+table_name("uefi_boot_order")
+description("UEFI Boot Order.")
+schema([
+    Column("label", STRING),
+])
+
+implementation("uefi_boot_order@genUefiBootOrder")
+fuzz_paths([
+  "/sys/firmware/efi/vars/BootOrder-8be4df61-93ca-11d2-aa0d-00e098032b8c/data",
+])
