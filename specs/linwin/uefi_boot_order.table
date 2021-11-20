@@ -1,6 +1,7 @@
 table_name("uefi_boot_order")
 description("UEFI Boot Order.")
 schema([
+    Column("position", INTEGER, "Position in the boot order (0 indexed)"),
     Column("label", TEXT, "Boot device label"),
 ])
 
