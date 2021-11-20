@@ -140,9 +140,9 @@ QueryData genUefiBootOrder(QueryContext& context) {
       return results;
     }
 
-    // The boot label is, I believe, stored as hex. As we're just
-    // printing it to osquery we can leave it in the std::string, and
-    // skip converting it to an int. We do still want to pad it.
+    // The boot label is, I believe, stored as little-endian hex. We
+    // read this as a std::string. As our subsequent uses are still
+    // simple strings, we can mostly leave it as is.
 
     // Also, endian? WTF
 
@@ -151,7 +151,8 @@ QueryData genUefiBootOrder(QueryContext& context) {
     //auto unpadded = efiData[i] + efiData[i+1];
     //auto bootLabel = std::string(n_zero - std::min(4, unpadded.length()), '0') + unpadded;
 
-    TLOG << "Got Label: i:" << efiData[i] << " i+1: " << efiData[i+1] << "\n";
+    TLOG << "Got Label bige " << efiData[i] + efiData[i+1] << "\n";
+    TLOG << "Got Label lite " << efiData[1+i] + efiData[i] << "\n";
   }
 
   return results;
