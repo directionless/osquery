@@ -77,7 +77,18 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
 
 
     // swap endianess
+    char tmp=0;
     for (auto i = 0; i < efiData.size();  i+=2) {
+      
+      if (i + 1 > efiData.size()) {
+	TLOG << "efivar BootOrder is not a multiple of 2 bytes";
+	return Status(1);
+      }
+
+      // Swap!
+      tmp = efiData[i+1];
+      efiData[i+1] = efiData[i];
+      efiData[i] = tmp;
     }
     
     
@@ -186,14 +197,11 @@ QueryData genUefiBootOrder(QueryContext& context) {
 
     std::string bootName;
     std::string labelAsStr = {bootLabel};
-    if (!readEfiVar(kEFIBootGUID, "Boot" + labelAsStr, bootName, 0).ok()) {
+    if (!readStringEfiVar(kEFIBootGUID, "Boot" + labelAsStr, bootName, 0).ok()) {
       TLOG << "efivar boot name failed to read label" << bootLabel;
       continue;
     }
     r["name"] = TEXT(bootName);
-
-    
-    // Also, endian? WTF
 
     
     // Convert these to their 4 digit numbers. It's not clear if this needs some hex or unhex conversions
