@@ -76,6 +76,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
     efiData = efiData.substr(3, efiData.size() - 4);
 
 
+    TLOG << "Yo, seph raw    " << efiData << "\n";
     // swap endianess
     char tmp=0;
     for (auto i = 0; i < efiData.size();  i+=2) {
@@ -91,7 +92,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
       efiData[i] = tmp;
     }
     
-    TLOG << "Yo, seph " << efiData << "\n";
+    TLOG << "Yo, seph swapped" << efiData << "\n";
     
     return Status::success();
   }
