@@ -59,13 +59,11 @@ function(efivarMain)
 
 
   target_include_directories(thirdparty_efivar PRIVATE
-    "${library_root}/src/efivar.h"
     "${library_root}/src/include"
     "${generated_file_root}/headers"
   )
 
   target_include_directories(thirdparty_efivar SYSTEM INTERFACE
-    "${library_root}/src/efivar.h"
     "${library_root}/src/include"
     "${generated_file_root}/headers"
   )
