@@ -12,7 +12,7 @@ function(efivarMain)
 
   set(library_root "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-  add_library(thirdparty_efivar INTERFACE
+  add_library(thirdparty_efivar INTERFACE)
   target_include_directories(thirdparty_efivar SYSTEM INTERFACE
     "${library_root}/src"
   )
