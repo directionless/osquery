@@ -91,6 +91,7 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
       efiData[i] = tmp;
     }
     
+    TLOG << "Yo, seph " << efiData << "\n";
     
     return Status::success();
   }
