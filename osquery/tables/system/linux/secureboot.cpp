@@ -8,7 +8,6 @@
  */
 
 #include <efivar/efivar.h>
-#include <efivar/efivar-types.h>
 
 #include <osquery/core/core.h>
 #include <osquery/core/tables.h>
@@ -85,7 +84,10 @@ QueryData genSecureBoot(QueryContext& context) {
   return results;
 }
 
-  
+
+  #define EFI_GLOBAL_VARIABLE \
+    EFI_GUID( 0x8BE4DF61, 0x93CA, 0x11d2, 0xAA0D, 0x00, 0xE0, 0x98, 0x03, 0x2B, 0x8C)
+
 QueryData genUefiBootOrder(QueryContext& context) {
   QueryData results;
 
