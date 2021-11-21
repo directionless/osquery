@@ -97,6 +97,7 @@ function(importLibraries)
     "Linux,Darwin,Windows:glog"
     "Linux,Darwin,Windows:googletest"
     "Linux,Darwin,Windows:libarchive"
+    "Linux:efivar"
     "Linux:libaudit"
     "Linux:libcryptsetup"
     "Linux:libdevmapper"
