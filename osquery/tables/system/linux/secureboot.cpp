@@ -95,7 +95,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
   uint32_t attributes = 0;
   size_t data_size = 0;
 
-  auto rc = efi_get_variable(EFI_GLOBAL_GUID, name, (uint8_t **)&data, &data_size, &attributes);
+  auto rc = efi_get_variable(EFI_GLOBAL_GUID, "BootOrder", (uint8_t **)&data, &data_size, &attributes);
   if (rc < 0) {
     TLOG << "got error reading efi variable\n";
     return results;
