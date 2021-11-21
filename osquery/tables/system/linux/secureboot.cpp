@@ -88,24 +88,36 @@ QueryData genSecureBoot(QueryContext& context) {
   #define EFI_GLOBAL_VARIABLE \
     EFI_GUID( 0x8BE4DF61, 0x93CA, 0x11d2, 0xAA0D, 0x00, 0xE0, 0x98, 0x03, 0x2B, 0x8C)
 
+
+int read_efi_variable(const char* name, uint16_t** data) {
+    uint16_t *res = NULL;
+    efi_guid_t guid = EFI_GLOBAL_VARIABLE;
+    uint32_t attributes = 0;
+    size_t data_size = 0;
+
+    int rc;
+    rc = efi_get_variable(guid, name, (uint8_t **)&res, &data_size, &attributes);
+    if (rc < 0) exit(rc);
+    *data = res;
+    return data_size / 2;
+}
+
 QueryData genUefiBootOrder(QueryContext& context) {
   QueryData results;
 
   uint16_t *data = NULL;
-  uint32_t attributes = 0;
-  size_t data_size = 0;
-  const char *name = "BootOrder";
+  int length = read_efi_variable("BootOrder", &data);
 
-  auto rc = efi_get_variable(EFI_GLOBAL_GUID, "BootOrder", (uint8_t **)&data, &data_size, &attributes);
-  if (rc < 0) {
+  if (length < 1) {
     TLOG << "got error reading efi variable\n";
     return results;
   }
+  
 
   // remember, these are all two byte things
   TLOG << "Yo SEPH"
        << "data: " << data
-       << "size: " << data_size / sizeof(uint16_t)
+       << "size: " << length
        << "\n";
 
 
