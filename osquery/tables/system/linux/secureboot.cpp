@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: (Apache-2.0 OR GPL-2.0-only)
  */
 
-#include <efi.h>
+#include <efivar.h>
 
 #include <osquery/core/core.h>
 #include <osquery/core/tables.h>
