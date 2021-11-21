@@ -83,5 +83,12 @@ QueryData genSecureBoot(QueryContext& context) {
   results.push_back(r);
   return results;
 }
+
+  QueryData genUefiBootOrder(QueryContext& context) {
+  const std::string efiBootOrderPath = efivarsDir + "BootOrder-" + kEFIBootGUID;
+  QueryData results;
+  return results;
+  }
+  
 } // namespace tables
 } // namespace osquery
