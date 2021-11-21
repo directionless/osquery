@@ -129,6 +129,7 @@ function(importLibraries)
     "Linux:expat"
     "Linux:dbus"
     "Linux:libcap"
+    "Linux:efivar"
   )
 
   if(OSQUERY_BUILD_BPF)
