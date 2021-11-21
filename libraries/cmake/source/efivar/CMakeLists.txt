@@ -23,6 +23,7 @@ function(efivarMain)
     "${library_root}/src/guids.S"
     "${library_root}/src/lib.c"
     "${library_root}/src/vars.c"
+    "${library_root}/src/efivar.c"
 
     "${generated_file_root}/map/libefivar.map"
     "${generated_file_root}/code/guid-symbols.c"
