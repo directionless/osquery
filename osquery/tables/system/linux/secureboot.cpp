@@ -52,6 +52,39 @@ const std::string efivarsDir = "/sys/firmware/efi/efivars/";
   }
 
 
+  Status readStringEfiVar(std::string guid,
+			  std::string name,
+			  std::string& efiData,
+			  size_t size
+			  ) {
+    const std::string efivarPath = efivarsDir + name + '-' + guid;
+
+    // failure to read _probably_ means the kernel doesn't support EFI
+    // vars. This is not uncommon.
+    if (!readFile(efivarPath, efiData, size).ok()) {
+      TLOG << "Unable to read efivar (" << efivarPath
+	   << "). Maybe no kernel support?\n";
+      return Status::success();
+    }
+
+    // First 4 bytes are attributes, so the length should be _at least_ that
+    if (efiData.size() < 4) {
+      TLOG << "Under read on efivar file : " << efivarPath;
+      return Status(1);
+    }
+
+    efiData = efiData.substr(3, efiData.size() - 4);
+
+
+    // swap endianess
+    for (auto i = 0; i < efiData.size();  i+=2) {
+    }
+    
+    
+    return Status::success();
+  }
+
+
 
   
 void readBoolEfiVar(Row& row,
@@ -133,7 +166,8 @@ QueryData genUefiBootOrder(QueryContext& context) {
     return results;
   }
 
-  // First 4 bytes are attributes, so we start reading at 4
+  // First 4 bytes are attributes, so we start reading at 4. Then we
+  // read 2 byte pairs.
   for (auto i = 4; i < efiData.length();  i+=2) {
     if (i > efiData.length()) {
       TLOG << "efivar BootOrder is not a multiple of 2 bytes";
@@ -141,7 +175,7 @@ QueryData genUefiBootOrder(QueryContext& context) {
     }
 
     Row r;
-    r["position"] = INTEGER(i/2 - 4);
+    r["position"] = INTEGER(i/2 - 2);
 
     // The boot label is, I believe, stored as little-endian hex. We
     // read this as a std::string. As our subsequent uses are still
