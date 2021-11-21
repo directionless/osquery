@@ -8,6 +8,7 @@
  */
 
 #include <efivar/efivar.h>
+#include <efivar/efivar-types.h>
 
 #include <osquery/core/core.h>
 #include <osquery/core/tables.h>
@@ -89,11 +90,10 @@ QueryData genUefiBootOrder(QueryContext& context) {
   QueryData results;
 
   uint16_t *data = NULL;
-  efi_guid_t guid =     EFI_GUID( 0x8BE4DF61, 0x93CA, 0x11d2, 0xAA0D, 0x00, 0xE0, 0x98, 0x03, 0x2B, 0x8C);
   uint32_t attributes = 0;
   size_t data_size = 0;
 
-  auto rc = efi_get_variable(guid, name, (uint8_t **)&data, &data_size, &attributes);
+  auto rc = efi_get_variable(EFI_GLOBAL_GUID, name, (uint8_t **)&data, &data_size, &attributes);
   if (rc < 0) {
     TLOG << "got error reading efi variable\n";
     return results;
