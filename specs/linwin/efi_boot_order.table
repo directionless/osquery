@@ -1,0 +1,12 @@
+table_name("efi_boot_order")
+description("UEFI Boot Order.")
+schema([
+    Column("position", INTEGER, "Position in the boot order (0 indexed)"),
+    Column("label", TEXT, "Boot device label"),
+    Column("name", TEXT, "Boot device name"),
+])
+
+implementation("uefi_boot_order@genEfiBootOrder")
+fuzz_paths([
+  "/sys/firmware/efi/vars/BootOrder-8be4df61-93ca-11d2-aa0d-00e098032b8c/data",
+])
