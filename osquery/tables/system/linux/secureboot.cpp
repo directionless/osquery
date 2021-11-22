@@ -137,7 +137,7 @@ void readBootDetails(Row& row,
   //description = efi_loadopt_desc(loadopt, data_size);
   row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
 
-
+  /*
   // Try to find the path
   efidp dp = NULL;
   uint16_t pathlen;
@@ -149,7 +149,7 @@ void readBootDetails(Row& row,
     return;
   }
 
-  
+  */
   
   return;
 

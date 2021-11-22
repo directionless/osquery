@@ -25,7 +25,6 @@ function(efivarMain)
     "${library_root}/src/lib.c"
     "${library_root}/src/vars.c"
     "${library_root}/src/loadopt.c"
-    "${library_root}/src/makeguids.c"
 
     "${generated_file_root}/map/libefivar.map"
     "${generated_file_root}/code/guid-symbols.c"
