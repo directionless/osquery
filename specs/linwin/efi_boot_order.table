@@ -4,6 +4,7 @@ schema([
     Column("position", INTEGER, "Position in the boot order (0 indexed)"),
     Column("label", TEXT, "Boot device label"),
     Column("description", TEXT, "Boot device description"),
+    Column("active", INTEGER, "Whether the boot device is active"),
 ])
 
 implementation("efi_boot_order@genEfiBootOrder")

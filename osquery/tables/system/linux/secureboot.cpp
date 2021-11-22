@@ -105,6 +105,39 @@ int read_efi_variable(const char* name, uint16_t** data) {
     return data_size / 2;
 }
 
+void readBootDetails(Row& row,
+		     char* label) {
+  char name[8];
+  sprintf(name, "Boot%04x", label);
+
+  efi_load_option *loadopt;
+  uint8_t *data = NULL;
+  size_t data_size = 0;
+  uint32_t attributes = 0;
+  const unsigned char *description;
+
+  if( efi_get_variable(EFI_GLOBAL_VARIABLE, name, &data, &data_size, &attrs) < 0 ){
+    TLOG << "EFI: Unable to read variable " << name << "\n";
+    return;
+  }
+
+  loadopt = (efi_load_option *)data;
+
+  if (!efi_loadopt_is_valid(loadopt, data_size)) {
+    TLOG << "EFI: load option for " << name << " is not valid\n";
+    return;
+  }
+
+  row["active"] = INTEGER(efi_loadopt_attrs(loadopt) & LOAD_OPTION_ACTIVE ? 1 : 0);
+
+  const unsigned char *description;
+  //description = efi_loadopt_desc(loadopt, data_size);
+  row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
+  
+  return;
+
+}
+  
 QueryData genEfiBootOrder(QueryContext& context) {
   QueryData results;
 
@@ -120,17 +153,19 @@ QueryData genEfiBootOrder(QueryContext& context) {
   for (auto i = 0; i < length; i++) {
     Row r;
     r["position"] = INTEGER(i);
+
     
     char label[4];
     sprintf(label, "%04x", data[i]);
     r["label"] = TEXT(label);
-    
     
     TLOG << "Yo SEPH "
 	 << "label: " << label
 	 << "i: " << i
        << "\n";
 
+    readBootDetails(r, label);
+    
     results.push_back(r);
   }
 
