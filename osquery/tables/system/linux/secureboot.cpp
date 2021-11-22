@@ -105,6 +105,8 @@ int read_efi_variable(const char* name, uint16_t** data) {
     return data_size / 2;
 }
 
+#define LOAD_OPTION_ACTIVE              0x00000001
+
 void readBootDetails(Row& row,
 		     char* label) {
   char name[8];
@@ -116,7 +118,7 @@ void readBootDetails(Row& row,
   uint32_t attributes = 0;
   const unsigned char *description;
 
-  if( efi_get_variable(EFI_GLOBAL_VARIABLE, name, &data, &data_size, &attrs) < 0 ){
+  if( efi_get_variable(EFI_GLOBAL_VARIABLE, name, &data, &data_size, &attributes) < 0 ){
     TLOG << "EFI: Unable to read variable " << name << "\n";
     return;
   }
@@ -130,7 +132,6 @@ void readBootDetails(Row& row,
 
   row["active"] = INTEGER(efi_loadopt_attrs(loadopt) & LOAD_OPTION_ACTIVE ? 1 : 0);
 
-  const unsigned char *description;
   //description = efi_loadopt_desc(loadopt, data_size);
   row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
   
