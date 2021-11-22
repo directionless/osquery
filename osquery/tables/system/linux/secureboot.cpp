@@ -137,12 +137,13 @@ void readBootDetails(Row& row,
   //description = efi_loadopt_desc(loadopt, data_size);
   row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
 
-  /*
   // Try to find the path
   efidp dp = NULL;
   uint16_t pathlen;
   dp = efi_loadopt_path(loadopt, data_size);
-  pathlen = efi_loadopt_pathlen(loadopt, data_size);
+
+    /*
+pathlen = efi_loadopt_pathlen(loadopt, data_size);
   auto rc = efidp_format_device_path(NULL, 0, dp, pathlen);
   if ( rc < 0) {
     TLOG << "EFI: bad device path\n";
@@ -175,11 +176,6 @@ QueryData genEfiBootOrder(QueryContext& context) {
     char label[4];
     sprintf(label, "%04x", data[i]);
     r["label"] = TEXT(label);
-    
-    TLOG << "Yo SEPH "
-	 << "label: " << label
-	 << "i: " << i
-       << "\n";
 
     readBootDetails(r, label);
     
