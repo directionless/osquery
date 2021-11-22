@@ -9,6 +9,7 @@
 
 extern "C" {
 #include <efivar/efivar.h>
+#include <efivar/efiboot.h>
 }
 
 #include <osquery/core/core.h>
