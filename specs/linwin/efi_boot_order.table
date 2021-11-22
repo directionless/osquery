@@ -3,7 +3,7 @@ description("UEFI Boot Order.")
 schema([
     Column("position", INTEGER, "Position in the boot order (0 indexed)"),
     Column("label", TEXT, "Boot device label"),
-    Column("name", TEXT, "Boot device name"),
+    Column("description", TEXT, "Boot device description"),
 ])
 
 implementation("efi_boot_order@genEfiBootOrder")
