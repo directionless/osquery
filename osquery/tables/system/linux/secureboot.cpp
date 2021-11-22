@@ -112,7 +112,6 @@ void readBootDetails(Row& row,
   char name[8];
   sprintf(name, "Boot%s", label);
 
-  efi_load_option *loadopt;
   uint8_t *data = NULL;
   size_t data_size = 0;
   uint32_t attributes = 0;
@@ -124,6 +123,7 @@ void readBootDetails(Row& row,
 
   // data is a packed struct. So cast it to the efi_load_option for
   // something better formed.
+  efi_load_option *loadopt;
   loadopt = (efi_load_option *)data;
 
   if (!efi_loadopt_is_valid(loadopt, data_size)) {
@@ -139,7 +139,9 @@ void readBootDetails(Row& row,
   uint16_t pathlen;
   dp = efi_loadopt_path(loadopt, data_size);
   pathlen = efi_loadopt_pathlen(loadopt, data_size);
-   auto rc = efidp_format_device_path(NULL, 0, dp, pathlen);
+
+  // Some cmake thing has this broken :(
+  auto rc = efidp_format_device_path(NULL, 0, dp, pathlen);
   if ( rc < 0) {
     TLOG << "EFI: bad device path\n";
     return;
