@@ -117,14 +117,23 @@ QueryData genEfiBootOrder(QueryContext& context) {
   
 
   for (auto i = 0; i < length; i++) {
-    auto label = data[i];
+    Row r;
+    r["position"] = i;
     
-  
+    char label[4];
+    sprintf(label, "%04x", data[id]);
+    r["label"] = TEXT(bootLabel);
+    
+    
     TLOG << "Yo SEPH "
 	 << "label: " << label
 	 << "i: " << i
        << "\n";
+
+    results.push_back(r);
   }
+
+  
 
   return results;
   }
