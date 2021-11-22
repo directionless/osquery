@@ -116,12 +116,15 @@ QueryData genEfiBootOrder(QueryContext& context) {
   }
   
 
-  // remember, these are all two byte things
-  TLOG << "Yo SEPH "
-       << "data*: " << *data
-       << "size: " << length
+  for (auto i = 0; i < length; i++) {
+    auto label = data[i];
+    
+  
+    TLOG << "Yo SEPH "
+	 << "label: " << label
+	 << "i: " << i
        << "\n";
-
+  }
 
   return results;
   }
