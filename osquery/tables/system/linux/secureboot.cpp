@@ -119,7 +119,7 @@ QueryData genEfiBootOrder(QueryContext& context) {
 
   // remember, these are all two byte things
   TLOG << "Yo SEPH "
-       << "list: " << list
+       << "data*: " << *data
        << "size: " << length
        << "\n";
 
