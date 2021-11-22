@@ -70,9 +70,10 @@ function(efivarMain)
   )
 
   set(public_header_list
-    "src/src/include/efivar/efivar.h"
+    "src/src/include/efivar/efiboot-creator.h"
     "src/src/include/efivar/efiboot.h"
     "src/src/include/efivar/efivar-dp.h"
+    "src/src/include/efivar/efivar.h"
   )
 
   generateIncludeNamespace(thirdparty_efivar
