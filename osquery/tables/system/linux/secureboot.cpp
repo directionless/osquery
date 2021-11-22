@@ -116,7 +116,6 @@ void readBootDetails(Row& row,
   uint8_t *data = NULL;
   size_t data_size = 0;
   uint32_t attributes = 0;
-  const unsigned char *description;
 
   if( efi_get_variable(EFI_GLOBAL_VARIABLE, name, &data, &data_size, &attributes) < 0 ){
     TLOG << "EFI: Unable to read variable " << name << "\n";
@@ -133,8 +132,6 @@ void readBootDetails(Row& row,
   }
 
   row["active"] = INTEGER(efi_loadopt_attrs(loadopt) & LOAD_OPTION_ACTIVE ? 1 : 0);
-
-  //description = efi_loadopt_desc(loadopt, data_size);
   row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
 
   // Try to find the path
@@ -142,13 +139,13 @@ void readBootDetails(Row& row,
   uint16_t pathlen;
   dp = efi_loadopt_path(loadopt, data_size);
   pathlen = efi_loadopt_pathlen(loadopt, data_size);
-  /*  auto rc = efidp_format_device_path(NULL, 0, dp, pathlen);
+   auto rc = efidp_format_device_path(NULL, 0, dp, pathlen);
   if ( rc < 0) {
     TLOG << "EFI: bad device path\n";
     return;
   }
 
-  */
+ 
   
   return;
 
