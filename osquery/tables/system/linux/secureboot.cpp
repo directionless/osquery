@@ -108,7 +108,7 @@ int read_efi_variable(const char* name, uint16_t** data) {
 #define LOAD_OPTION_ACTIVE              0x00000001
 
 void readBootDetails(Row& row,
-		     char* label) {
+		     char label[4]) {
   char name[8];
   sprintf(name, "Boot%s", label);
 
@@ -147,7 +147,7 @@ void readBootDetails(Row& row,
   if ( rc < 0) {
     TLOG << "EFI: bad device path\n";
     return;
-      }
+  }
 
   
   
