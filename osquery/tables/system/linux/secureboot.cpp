@@ -121,7 +121,7 @@ QueryData genEfiBootOrder(QueryContext& context) {
     r["position"] = i;
     
     char label[4];
-    sprintf(label, "%04x", data[id]);
+    sprintf(label, "%04x", data[i]);
     r["label"] = TEXT(label);
     
     
