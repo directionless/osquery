@@ -122,7 +122,7 @@ QueryData genEfiBootOrder(QueryContext& context) {
     
     char label[4];
     sprintf(label, "%04x", data[id]);
-    r["label"] = TEXT(bootLabel);
+    r["label"] = TEXT(label);
     
     
     TLOG << "Yo SEPH "
