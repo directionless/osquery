@@ -104,7 +104,7 @@ int read_efi_variable(const char* name, uint16_t** data) {
     return data_size / 2;
 }
 
-QueryData genUefiBootOrder(QueryContext& context) {
+QueryData genEfiBootOrder(QueryContext& context) {
   QueryData results;
 
   uint16_t *data = NULL;
