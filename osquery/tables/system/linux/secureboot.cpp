@@ -108,9 +108,9 @@ int read_efi_variable(const char* name, uint16_t** data) {
 #define LOAD_OPTION_ACTIVE              0x00000001
 
 void readBootDetails(Row& row,
-		     std::string label) {
+		     char* label) {
   char name[8];
-  sprintf(name, "Boot%04x", label);
+  sprintf(name, "Boot%s", label);
 
   efi_load_option *loadopt;
   uint8_t *data = NULL;
@@ -140,7 +140,16 @@ void readBootDetails(Row& row,
 
   // Try to find the path
   efidp dp = NULL;
+  uint16_t pathlen;
+  dp = efi_loadopt_path(loadopt, data_size);
+  pathlen = efi_loadopt_pathlen(loadopt, data_size);
+  rc = efidp_format_device_path(NULL, 0, dp, pathlen);
+  if ( rc < 0) {
+    TLOG << "EFI: bad device path\n";
+    return;
+      }
 
+  
   
   return;
 
