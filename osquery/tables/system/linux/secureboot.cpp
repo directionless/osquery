@@ -109,7 +109,6 @@ QueryData genEfiBootOrder(QueryContext& context) {
 
   uint16_t *data = NULL;
   int length = read_efi_variable("BootOrder", &data);
-  *list = data;
 
   if (length < 1) {
     TLOG << "got error reading efi variable\n";
