@@ -11,11 +11,12 @@ function(efivarMain)
   set(generated_file_root "${CMAKE_CURRENT_SOURCE_DIR}/generated/linux/${TARGET_PROCESSOR}")
 
   add_library(thirdparty_efivar
-    "${library_root}/src/dp.c"
     "${library_root}/src/dp-acpi.c"
     "${library_root}/src/dp-hw.c"
     "${library_root}/src/dp-media.c"
     "${library_root}/src/dp-message.c"
+    "${library_root}/src/dp.c"
+    "${library_root}/src/efivar.c"
     "${library_root}/src/efivarfs.c"
     "${library_root}/src/error.c"
     "${library_root}/src/export.c"
@@ -23,7 +24,6 @@ function(efivarMain)
     "${library_root}/src/guids.S"
     "${library_root}/src/lib.c"
     "${library_root}/src/vars.c"
-    "${library_root}/src/efivar.c"
 
     "${generated_file_root}/map/libefivar.map"
     "${generated_file_root}/code/guid-symbols.c"
@@ -52,21 +52,23 @@ function(efivarMain)
       ${CMAKE_DL_LIBS}
   )
 
-# FIXME: These includes are probablt overly broad:
-#  $ dpkg -L libefivar-dev | grep .h$
-#  /usr/include/efivar/efivar-dp.h
-#  /usr/include/efivar/efivar-guids.h
-#  /usr/include/efivar/efivar.h
-
-
   target_include_directories(thirdparty_efivar PRIVATE
-    "${library_root}/src/include"
     "${generated_file_root}/headers"
   )
 
   target_include_directories(thirdparty_efivar SYSTEM INTERFACE
-    "${library_root}/src/include"
     "${generated_file_root}/headers"
+  )
+
+  set(public_header_list
+    "src/src/include/efivar/efivar.h"
+    "src/src/include/efivar/efivar-dp.h"
+  )
+
+  generateIncludeNamespace(thirdparty_efivar
+    "efivar"
+    "FILE_ONLY"
+    ${public_header_list}
   )
 endfunction()
 
