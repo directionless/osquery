@@ -108,7 +108,7 @@ int read_efi_variable(const char* name, uint16_t** data) {
 #define LOAD_OPTION_ACTIVE              0x00000001
 
 void readBootDetails(Row& row,
-		     char* label) {
+		     std::string label) {
   char name[8];
   sprintf(name, "Boot%04x", label);
 
@@ -123,6 +123,8 @@ void readBootDetails(Row& row,
     return;
   }
 
+  // data is a packed struct. So cast it to the efi_load_option for
+  // something better formed.
   loadopt = (efi_load_option *)data;
 
   if (!efi_loadopt_is_valid(loadopt, data_size)) {
@@ -134,6 +136,11 @@ void readBootDetails(Row& row,
 
   //description = efi_loadopt_desc(loadopt, data_size);
   row["description"] = TEXT(efi_loadopt_desc(loadopt, data_size));
+
+
+  // Try to find the path
+  efidp dp = NULL;
+
   
   return;
 
